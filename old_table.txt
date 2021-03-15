@@ -1,0 +1,24 @@
+<Table className="searchModalTable" striped bordered hover size="sm" responsive>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>UPC/ASIN</th>
+                                    <th>Title</th>
+                                    <th>Retail</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Array.from({ length: currentProductData.productList.length }).map((_, index) => (
+                                    <tr value={index} onClick={(e) => setUserChosenProduct(currentProductData.productList[index])}>
+                                        <td >{index + 1}</td>
+                                        <td><Image className="searchModalImage" src={currentProductData.productList[index].image} thumbnail fluid /></td>
+                                        <td>{currentProductData.productList[index].asinid}</td>
+                                        <td className="searchModalTitle">{currentProductData.productList[index].title}</td>
+                                        <td>{currentProductData.productList[index].price}</td>
+                                        <td>{currentProductData.productList[index].source}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
