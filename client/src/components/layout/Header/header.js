@@ -10,9 +10,9 @@ export default function Header() {
         
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             {userData.user ? (
-                <Navbar.Brand href="/">Liquidations Plus</Navbar.Brand>
+                <Navbar.Brand href="/">NWO Liquidations</Navbar.Brand>
             ):(
-                <Navbar.Brand href="/login">Liquidations Plus</Navbar.Brand>
+                <Navbar.Brand href="/login">NWO Liquidations</Navbar.Brand>
             )}
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
