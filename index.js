@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 // set up routes
 app.use("/api/products", require("./routes/productRouter"));
 app.use("/api/users", require("./routes/userRouter"));
-app.use("/api/truckloads", require("./routes/TruckLoadRouter"));
+app.use("/api/truckloads", require("./routes/TruckloadRouter"));
 app.use("/api/retailers", require("./routes/RetailerRouter"));
 app.use("/api/catalogs", require("./routes/CatalogRouter"));
 app.use("/api/inpallet", require("./routes/InPalletRouter"));

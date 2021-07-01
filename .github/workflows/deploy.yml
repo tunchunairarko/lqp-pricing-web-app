@@ -20,30 +20,13 @@ jobs:
       with:
         source: "."
         target: "/var/www/nwodemo"
-    
-    - name: Install client modules
+
+    - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: cd /var/www/nwodemo/client && npm i
+        script: ls
     
-    - name: Build client
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: cd /var/www/nwodemo/client && npm run build
-    
-    - name: Go back and install all server modules
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: cd /var/www/nwodemo && && npm i
