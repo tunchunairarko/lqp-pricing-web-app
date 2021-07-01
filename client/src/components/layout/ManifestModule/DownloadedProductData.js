@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useContext, useEffect } from 'react'
 import { Form, Row, Col, Button, Card, ButtonGroup, Dropdown } from 'react-bootstrap'
 import { FaBroom, FaDumpsterFire, FaUpload, FaCamera } from 'react-icons/fa';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import "../../../components/assets/style.css";
 import Axios from "axios";
 import UserContext from "../../../context/UserContext";
@@ -14,7 +14,7 @@ import { useFileUpload } from "use-file-upload";
 // import Camera from 'react-html5-camera-photo';
 // import 'react-html5-camera-photo/build/css/index.css';
 
-export default function DownloadedProductData({ title, upc, description, retail, image, setTitle, setRetail, setUpc, setDescription, setImage }) {
+export default function DownloadedProductData({ title, upc, retail, image, setTitle, setRetail, setUpc, setImage }) {
     const { userData } = useContext(UserContext);
     const [cookies] = useCookies(["user"]);
     const [error, setError] = useState();
@@ -44,7 +44,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
         setTitle("")
         setUpc("")
         setRetail("")
-        setDescription("")
+        
         setImage("https://cdn.shopify.com/s/files/1/0514/3520/8854/files/surplus-auction.png?v=1609197903")
         setDiscount("50")
         setQuantity("1")
@@ -67,7 +67,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
                         title: title,
                         upc: upc,
                         sku: sku,
-                        description: description,
+                        
                         image: image,
                         retail: retail.toString(),
                         condition: condition,
@@ -161,7 +161,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
                                     capture="environment"
                                     onChange={(e) => handleCapture(e.target)}
                                 />
-                                <Form.Label for="icon-button-file" className="imageTakerLabel">
+                                <Form.Label htmlFor="icon-button-file" className="imageTakerLabel">
                                     <FaCamera /> Upload Photo
                                 </Form.Label >
                                 {/* <ButtonGroup aria-label="Photo-camera-file" style={{ display: 'flex', marginBottom: '10px' }}>
@@ -240,7 +240,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
                                     </ButtonGroup>
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                            <Form.Group as={Row} controlId="formPlaintextEmail2">
                                 <Form.Label column sm="2">
                                     Condition
                                 </Form.Label>
@@ -267,7 +267,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
                                     <Form.Control placeholder="Separate by comma (,)" disabled />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="formPlaintextEmail">
+                            {/* <Form.Group as={Row} controlId="formPlaintextEmail">
                                 <Form.Label column sm="2">
                                     Description
                                 </Form.Label>
@@ -295,7 +295,7 @@ export default function DownloadedProductData({ title, upc, description, retail,
                                     // }}
                                     />
                                 </Col>
-                            </Form.Group>
+                            </Form.Group> */}
                             <Form.Group as={Row} controlId="formPlaintextEmail">
                                 <Col sm="6" className="mt-2">
                                     <Button variant="success" block onClick={postProduct}><FaUpload /> Post Product </Button>

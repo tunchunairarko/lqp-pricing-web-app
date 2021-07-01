@@ -112,7 +112,11 @@ export default function App() {
                         <PublicRoute restricted={true} component={Login} path="/login" exact />
                         <PublicRoute restricted={true} component={Register} path="/register" exact />
                         <PrivateRoute component={Admin} path="/dashboard" exact />
-                        <PrivateRoute component={Admin} path="/posting" exact />
+                        <PrivateRoute component={Admin} path="/listing" exact />
+                        <PrivateRoute component={Admin} path="/truckload/new" exact />
+                        <PrivateRoute component={Admin} path="/inboundpallet/new" exact />
+                        <PrivateRoute component={Admin} path="/location/new" exact />
+                        <PrivateRoute component={Admin} path="/outboundpallet/new" exact />
                         <PublicRoute restricted={true} component={Admin} path="/" exact />
                         
                     </Switch>

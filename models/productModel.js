@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
+mongoose.set('useFindAndModify', false);
 
 const productSchema = new mongoose.Schema({
-    // username: { type: String, required: true, unique: true },
-    // email: { type: String, required: true, unique: true },
-    // password: { type: String, required: true, minlength: 5 },
-    // displayName: { type: String },
-    shopifyID :{ type: String, required: true, unique: true},
+    loadID:{type:String,required:true},
+    ipin:{type:String,required:true},
+    inventoryID:{type:String,required:true},
     upc: { type: String, required: true },
-    sku: {type: String, required:true},
     title: {type: String},
-    retail: {type: String},
-    discounted_price: {type: String},
+    unit_price: {type: String},
+    cost_price: {type: String},
     image: {type: String},
     description: {type: String},
     condition: {type:String},

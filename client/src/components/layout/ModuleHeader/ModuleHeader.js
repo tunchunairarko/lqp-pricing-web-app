@@ -1,6 +1,6 @@
 import React, {Fragment,useState} from 'react'
-import { Nav, Navbar,} from 'react-bootstrap'
-import { FaGem, } from 'react-icons/fa';
+import { Nav, Navbar, Button, Row} from 'react-bootstrap'
+import { FaGem,FaPlus } from 'react-icons/fa';
 import { useCookies } from "react-cookie";
 import { useDidMount } from "react-hooks-lib";
 
@@ -26,14 +26,14 @@ export default function ModuleHeader({moduleName}) {
     })
     return (
         <Fragment>
+            <Button variant="success" href="/listing"><FaPlus /> New Manifest</Button>
+            
             <Navbar collapseOnSelect expand="lg" variant="light" bg="light" className="moduleHeader">
                 <Navbar.Brand href="/Dashboard">{moduleName}</Navbar.Brand>
                 <Navbar.Toggle />
                 
                 <Navbar.Collapse className="justify-content-end">
-                <Nav className="mr-auto">
-                    <Nav.Link href="/posting" ><FaGem /> Post products</Nav.Link>
-                </Nav>
+                
                     <Navbar.Text className="navText">
                         Current time: {curTime}
                     </Navbar.Text>

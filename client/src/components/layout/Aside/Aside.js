@@ -3,6 +3,7 @@ import React, { Fragment, useContext } from 'react';
 import {
   ProSidebar,
   Menu,
+  SubMenu,
   MenuItem,
   SidebarHeader,
   SidebarFooter,
@@ -10,7 +11,7 @@ import {
 } from 'react-pro-sidebar';
 import { Link, useHistory } from "react-router-dom";
 
-import { FaTachometerAlt, FaGem, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaSignOutAlt, FaDashcube, FaTruck, FaMapMarked, FaTable } from 'react-icons/fa';
 import sidebarBg from '../../assets/bg1.jpg';
 import UserContext from "../../../context/UserContext";
 
@@ -19,10 +20,10 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
   const history = useHistory(); //history is all events that had happened in the url bar
   const logout = () => {
     setUserData({
-      token:undefined,
-      user:undefined
+      token: undefined,
+      user: undefined
     });
-    localStorage.setItem("auth-token","");
+    localStorage.setItem("auth-token", "");
     history.push("/login");
   }
 
@@ -34,9 +35,10 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
         collapsed={collapsed}
         toggled={toggled}
         breakPoint="md"
-        onToggle={handleToggleSidebar}
+        onToggle={handleToggleSidebar} 
+        className="sidebar-main"
       >
-        <SidebarHeader>
+        <SidebarHeader setstyle={{ border: 'none' }}>
           <div
             style={{
               padding: '24px',
@@ -58,8 +60,8 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
 
             <MenuItem
 
-              icon={<FaTachometerAlt />}
-              // suffix={<span className="badge red">Dashboard</span>}
+              icon={<FaDashcube />}
+            // suffix={<span className="badge red">Dashboard</span>}
             >
               <Link className="nav-link" to={`/`}>
                 Dashboard
@@ -67,16 +69,129 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             </MenuItem>
 
 
-            <MenuItem
+            {/* <MenuItem
               icon={<FaGem />}>
               <Link className="nav-link" to={`/posting`}>
                 Posting Module
+              </Link>
+            </MenuItem> */}
+
+            <MenuItem
+              icon={<FaTachometerAlt />} >
+
+              <Link className="nav-link" to={`/settings`}>
+                Settings
               </Link>
             </MenuItem>
 
 
           </Menu>
+          
+          <Menu iconShape="circle">
 
+            <SubMenu
+              // suffix={<span className="badge yellow">3</span>}
+              title="Location"
+              icon={<FaMapMarked />}
+            >
+              <MenuItem>
+                <Link className="nav-link" to={`/location/new`}>
+                  Create New Location
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link className="nav-link" to={`/settings`}>
+                  Location Report
+                </Link>
+              </MenuItem>
+
+            </SubMenu>
+            <SubMenu
+              // suffix={<span className="badge yellow">3</span>}
+              title="Truckloads"
+              icon={<FaTruck />}
+            >
+              <MenuItem>
+                <Link className="nav-link" to={`/truckload/new`}>
+                  Create New Truckload
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link className="nav-link" to={`/inboundpallet/new`}>
+                  Register a pallet
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link className="nav-link" to={`/settings`} >
+                  List Truckloads
+                </Link>
+              </MenuItem>
+            </SubMenu>
+            <SubMenu
+              // suffix={<span className="badge yellow">3</span>}
+              title="Manifest"
+              icon={<FaTable />}
+            >
+              <MenuItem>
+                <Link className="nav-link" to={`/outboundpallet/new`} >
+                  Register outbound pallet
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link className="nav-link" to={`/listing`} style={{ color: '#f9ca24' }}>
+                  Manifest Maker
+                </Link>
+              </MenuItem>
+
+              <MenuItem>
+                <Link className="nav-link" to={`/settings`} >
+                  Outbound report
+                </Link>
+              </MenuItem>
+
+              <MenuItem>
+                <Link className="nav-link" to={`/settings`} >
+                  Item inventory
+                </Link>
+              </MenuItem>
+            </SubMenu>
+
+          </Menu>
+          {/* <h6
+          style={{
+            position: 'relative',
+            display: 'flex',
+            padding: '8px 35px 8px 20px',
+            cursor: 'pointer',
+          }}
+          >Outbound</h6>
+          <Menu iconShape="circle">
+            
+            <SubMenu
+              // suffix={<span className="badge yellow">3</span>}
+              title="Location"
+              icon={<FaMapMarked />}
+            >
+              <MenuItem>Create New Location</MenuItem>
+              <MenuItem>Location Report</MenuItem>
+              
+            </SubMenu>
+            <SubMenu
+              // suffix={<span className="badge yellow">3</span>}
+              title="Truckloads"
+              icon={<FaTruck />}
+            >
+              <MenuItem>Create New Truckload</MenuItem>
+              <MenuItem>Register a pallet</MenuItem>
+              <MenuItem>List Truckloads</MenuItem>              
+            </SubMenu>
+            <MenuItem
+              icon={<FaTable />} style={{color:'#f9ca24'}}>
+              <Link className="nav-link" to={`/settings`} style={{color:'#f9ca24'}}>
+                Manifest Maker
+              </Link>
+            </MenuItem>
+          </Menu> */}
         </SidebarContent>
 
         <SidebarFooter style={{ textAlign: 'center' }}>
@@ -91,7 +206,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
               <span> Logout</span>
             </a>
           </div>
-          
+
         </SidebarFooter>
       </ProSidebar>
     </Fragment>

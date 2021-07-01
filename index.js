@@ -3,15 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const helmet = require("helmet");
-// const rateLimit = require("express-rate-limit");
-// set up express
-
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100 // limit each IP to 100 requests per windowMs
-// });
-
-// app.use(limiter);
 
 mongoose.connect(
   process.env.MONGODB_CONNECTION_STRING,
@@ -49,6 +40,12 @@ app.use((req, res, next) => {
 // set up routes
 app.use("/api/products", require("./routes/productRouter"));
 app.use("/api/users", require("./routes/userRouter"));
+app.use("/api/truckloads", require("./routes/TruckLoadRouter"));
+app.use("/api/retailers", require("./routes/RetailerRouter"));
+app.use("/api/catalogs", require("./routes/CatalogRouter"));
+app.use("/api/inpallet", require("./routes/InPalletRouter"));
+app.use("/api/outpallet", require("./routes/OutPalletRouter"));
+app.use("/api/locations", require("./routes/LocationRouter"));
 
 app.get("*", function (req, res) {
   res.sendFile('index.html', { root });
@@ -57,7 +54,3 @@ app.get("*", function (req, res) {
 app.use(helmet());
 
 app.listen(PORT, () => console.log(`The server has started on port: ${PORT}`));
-
-
-
-

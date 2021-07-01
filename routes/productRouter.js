@@ -2,8 +2,6 @@ const router = require("express").Router();
 const auth = require("../middleware/auth");
 const { PythonShell } = require('python-shell');
 const path = require('path');
-const Products = require("../models/productModel");
-const UserProducts = require("../models/userPostedProducts");
 var Barcoder = require('barcoder');
 
 
@@ -198,18 +196,19 @@ router.get("/getsku", auth, async (req, res) => {
 
 router.post("/dashboarddata", auth, async (req, res) =>{
     const { username } = req.body;
-    // console.log(username)
-    const userPostedProductsCount = await UserProducts.countDocuments({username:username})
-    const totPostedProductsCount = await Products.countDocuments({})
+    // // console.log(username)
+    // const userPostedProductsCount = await UserProducts.countDocuments({username:username})
+    // const totPostedProductsCount = await Products.countDocuments({})
 
-    const resData = await UserProducts.aggregate([
-        {$group :{_id:"$username","count":{$sum:1}}},
-        {$sort:{"count":-1}},
-        {$limit : 5}]
-    )
-    const bestPoster = resData[0]._id
-    const bestPosterCount=resData[0].count
-    res.json({userPostedProductsCount,totPostedProductsCount,bestPoster,bestPosterCount})
+    // const resData = await UserProducts.aggregate([
+    //     {$group :{_id:"$username","count":{$sum:1}}},
+    //     {$sort:{"count":-1}},
+    //     {$limit : 5}]
+    // )
+    // const bestPoster = resData[0]._id
+    // const bestPosterCount=resData[0].count
+    res.json({})
+    // res.json({userPostedProductsCount,totPostedProductsCount,bestPoster,bestPosterCount})
 })
 
 
