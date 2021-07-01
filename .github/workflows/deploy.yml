@@ -20,15 +20,6 @@ jobs:
       with:
         source: "."
         target: "/var/www/nwodemo"
-
-    - name: CD to client
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: cd /var/www/nwodemo/client
     
     - name: Install client modules
       uses: appleboy/ssh-action@master
@@ -37,7 +28,7 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: npm i
+        script: cd /var/www/nwodemo/client && npm i
     
     - name: Build client
       uses: appleboy/ssh-action@master
@@ -46,7 +37,7 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: npm run build
+        script: cd /var/www/nwodemo/client && npm run build
     
     - name: Go back and install all server modules
       uses: appleboy/ssh-action@master
@@ -55,4 +46,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: cd .. && npm i
+        script: cd /var/www/nwodemo && && npm i
