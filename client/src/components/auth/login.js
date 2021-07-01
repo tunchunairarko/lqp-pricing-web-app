@@ -56,7 +56,7 @@ export default function Login() {
                         <ErrorNotice message={error} clearError={() => setError(undefined)} />
                     )}
                     <h1>
-                        LQP Pricing login
+                        User Login
                     </h1>
                     <Form onSubmit={submit}>
                         <Form.Group controlId="formUserName">
