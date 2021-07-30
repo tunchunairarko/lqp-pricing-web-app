@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 mongoose.set('useFindAndModify', false);
 
 const inventorySchema = new mongoose.Schema({
-    username: {type:String,required: true},
+    username: {type:String},
     load_no:{type:String,required:true},
     ipin:{type:String,required:true},
     opin:{type:String,required:true},

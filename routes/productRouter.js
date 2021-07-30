@@ -58,7 +58,6 @@ router.post("/new", auth,  async (req, res) => {
         }catch(err){
             res.json(err)
         }
-
         // var productString = JSON.stringify(productInp)
         const newItem = new InventoryItems(inventoryItem)
         const savedNewItem = await newItem.save();
