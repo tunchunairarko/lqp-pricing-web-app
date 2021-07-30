@@ -194,11 +194,15 @@ router.post("/productlist", auth,  async (req, res) => {
                 scriptPath: path.join(__dirname, '../python'), //If you are having python_test.py script in same folder, then it's optional. 
                 args: [query, queryType, marketplaceString] //An argument which can be accessed in the script using sys.argv[1] 
             };
-            PythonShell.run('apiController.py', options, function (err, result) {
-                if (err) throw err;
-                console.log('result: ', result); 
-                res.send(result[0])
-            });
+            try{
+                PythonShell.run('apiController.py', options, function (err, result) {
+                    if (err) throw err;
+                    console.log('result: ', result); 
+                    res.send(result[0])
+                });
+            }catch(err){
+                res.status(500).json({ error: err.message });
+            }
         }
     } catch (err) {
         dumpError(err)

@@ -60,6 +60,27 @@ def main():
         if(productList==[] or productList==[{}] or productList==[[{}]]):
             productList=[{}]
         print(json.dumps(productList))
+    else:
+        api=productDataApi.ProductDataAPI(query)                
+        prodDataApiList=api.product_list
+        
+        api=RainForestApi()
+        productList=api.searchProducts(query=query,marketplace=marketplace_arr)
+        amzProductList=productList
+        productList=[]
+        i=0 #this is required for react bootstrap table 2
+        for item in prodDataApiList:
+            item['key']=str(i)
+            productList.append(item)
+            i=i+1
+        
+        for item in amzProductList:
+            item['key']=str(i)
+            productList.append(item)
+            i=i+1
+        if(productList==[] or productList==[{}] or productList==[[{}]]):
+            productList=[{}]
+        print(json.dumps(productList))
             
 
 if __name__=='__main__':
