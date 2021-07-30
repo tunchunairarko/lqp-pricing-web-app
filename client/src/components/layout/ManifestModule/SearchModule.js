@@ -7,7 +7,7 @@ import { Card } from 'react-bootstrap';
 import SearchModal from './SearchModal';
 import ScannerController from '../../scanner/ScannerController';
 
-export default function SearchModule({setTitle,setRetail,setUpc,setImage}) {
+export default function SearchModule({setTitle,setRetail,setUpc,setImage,setRetailer}) {
     let [show, setShow] = useState(false);
     const [marketPlace] = useState({
         US:true,
@@ -60,6 +60,7 @@ export default function SearchModule({setTitle,setRetail,setUpc,setImage}) {
         setRetail(product.price)
         setImage(product.image)
         setUpc(product.asinid)
+        setRetailer(product.brand)
     }
 
 

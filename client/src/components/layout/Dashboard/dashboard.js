@@ -48,7 +48,10 @@ export default function Dashboard() {
     return (
         <Fragment>
             <ModuleHeader moduleName={"Dashboard"}/>
-            <Row >
+            <div>
+                Under construction. Check the other options.
+            </div>
+            {/* <Row >
                 <Col className="mb-2" sm align="right">
                     
                     <small className="text-muted mr-2 ml-2" onClick={() => window.location.reload(false)}> <a href="#"><FaUndo /> Refresh data</a> </small>
@@ -58,7 +61,7 @@ export default function Dashboard() {
                 <DashCard title={"User upload"} value={userUpload} image={Upload} />
                 <DashCard title={"Total upload"} value={totalUpload} image={Total} />
                 <DashCard title={"Best uploader"} value={bestUploader} image={Best} />
-            </CardDeck>
+            </CardDeck> */}
         </Fragment>
     )
 }

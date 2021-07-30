@@ -21,15 +21,17 @@ def getChosenMarketplaces(jso):
 def main():
     query=sys.argv[1]
     queryType=sys.argv[2]
+    # marketplace_json={ "US": True, "CA": False, "UK": False, "FR": False, "DE": False, "ES": False, "IT": False, "MX": False, "JP": False, "IN": False, "AU": False, "NL": False, "SE": False, "AE": False, "SG": False }
     marketplace_json=jsonpickle.loads(sys.argv[3])
-    
+    # print(marketplace_json)
     marketplace_arr=getChosenMarketplaces(marketplace_json)
-
+    # print(marketplace_arr)
     if(queryType=='ASIN'):
         api=RainForestApi()
         productList=api.searchProducts(query=query,marketplace=marketplace_arr)
         amzProductList=productList
         productList=[]
+        i=0
         for item in amzProductList:
             item['key']=str(i)
             productList.append(item)

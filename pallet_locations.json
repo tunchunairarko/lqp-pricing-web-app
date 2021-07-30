@@ -1,0 +1,114 @@
+[{
+  "_id": {
+    "$oid": "60b93dde9e2d5f43bcc2d44e"
+  },
+  "locationNo": "A-2",
+  "username": "admin",
+  "pallets": [
+    {
+      "_id": {
+        "$oid": "60b93def9e2d5f43bcc2d452"
+      },
+      "ipin": "LQP_K50MR4PT",
+      "loadNo": "Ama_TKTUCMYW"
+    },
+    {
+      "_id": {
+        "$oid": "6104087525d8fc1eb81124a0"
+      },
+      "ipin": "IP_2T8CDPET",
+      "loadNo": "Ama_TKTUCMYW"
+    },
+    {
+      "_id": {
+        "$oid": "6104089a25d8fc1eb81124a3"
+      },
+      "ipin": "IP_80DWH24M",
+      "loadNo": "Ama_WM5X544P"
+    },
+    {
+      "_id": {
+        "$oid": "610408d76a6fd412f8f64aa7"
+      },
+      "ipin": "IP_T50P85H0",
+      "loadNo": "Ama_WM5X544P"
+    },
+    {
+      "_id": {
+        "$oid": "6104099bdab83b2818307c36"
+      },
+      "ipin": "IP_2584KDMU",
+      "loadNo": "Ama_2040MXYR"
+    }
+  ],
+  "createdAt": {
+    "$date": "2021-06-03T20:38:54.767Z"
+  },
+  "updatedAt": {
+    "$date": "2021-07-30T14:15:55.968Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "60b93dde9e2d5f43bcc2d44e"
+  },
+  "locationNo": "A-3",
+  "username": "admin",
+  "pallets": [
+    {
+      "_id": {
+        "$oid": "60b93def9e2d5f43bcc2d452"
+      },
+      "ipin": "LQP_K50MR4PT",
+      "loadNo": "Ama_TKTUCMYW"
+    },{
+      "_id": {
+        "$oid": "60b93def9e2d5f43bcc2d452"
+      },
+      "ipin": "LQP_K50MR4PT",
+      "loadNo": "Ama_TKTUCMYW"
+    },{
+      "_id": {
+        "$oid": "60b93def9e2d5f43bcc2d452"
+      },
+      "ipin": "LQP_K50MR4PT",
+      "loadNo": "Ama_TKTUCMYW"
+    },
+    {
+      "_id": {
+        "$oid": "6104087525d8fc1eb81124a0"
+      },
+      "ipin": "IP_2T8CDPET",
+      "loadNo": "Ama_TKTUCMYW"
+    },
+    {
+      "_id": {
+        "$oid": "6104089a25d8fc1eb81124a3"
+      },
+      "ipin": "IP_80DWH24M",
+      "loadNo": "Ama_WM5X544P"
+    },
+    {
+      "_id": {
+        "$oid": "610408d76a6fd412f8f64aa7"
+      },
+      "ipin": "IP_T50P85H0",
+      "loadNo": "Ama_WM5X544P"
+    },
+    {
+      "_id": {
+        "$oid": "6104099bdab83b2818307c36"
+      },
+      "ipin": "IP_2584KDMU",
+      "loadNo": "Ama_2040MXYR"
+    }
+  ],
+  "createdAt": {
+    "$date": "2021-06-03T20:38:54.767Z"
+  },
+  "updatedAt": {
+    "$date": "2021-07-30T14:15:55.968Z"
+  },
+  "__v": 0
+}]

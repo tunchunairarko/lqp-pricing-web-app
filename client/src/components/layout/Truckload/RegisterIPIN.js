@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment, useContext, useRef } from 'react'
 import ModuleHeader from "../ModuleHeader/ModuleHeader";
-import { Form, Row, Col, Button, Card, ButtonGroup, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
-import { FaBroom, FaDumpsterFire, FaUpload, FaCopy, FaRecycle } from 'react-icons/fa';
+import { Form, Row, Col, Button, Card, InputGroup} from 'react-bootstrap';
+import { FaDumpsterFire, FaUpload, FaCopy } from 'react-icons/fa';
 import "../../../components/assets/style.css";
 import { useCookies } from "react-cookie";
 import 'react-widgets/dist/css/react-widgets.css';
@@ -84,8 +84,8 @@ export default function RegisterIPIN() {
                         if (locationRes.data) {
                             const temp3 = []
                             // console.log(locationRes.data)
-                            for (var i = 0; i < locationRes.data.locations.length; i++) {
-                                temp3.push(locationRes.data.locations[i].locationNo)
+                            for (var u = 0; u < locationRes.data.locations.length; u++) {
+                                temp3.push(locationRes.data.locations[u].locationNo)
                             }
                             // console.log(temp2)
                             setLocationList(temp3);

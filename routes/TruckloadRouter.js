@@ -25,7 +25,7 @@ router.get("/", auth, async (req, res) => {
 });  
 router.post("/create", auth,  async (req, res) => {
     try {
-        let { username, retailer_short,retailer } = req.body;
+        let { username, retailer, retailer_short } = req.body;
         if(!username){
             username="admin"
         }

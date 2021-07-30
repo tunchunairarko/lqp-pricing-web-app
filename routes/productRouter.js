@@ -3,7 +3,9 @@ const auth = require("../middleware/auth");
 const { PythonShell } = require('python-shell');
 const path = require('path');
 var Barcoder = require('barcoder');
-
+const InventoryItems = require("../models/inventoryModel");
+const OutPallets = require("../models/OutPalletModel");
+const InPallets = require("../models/InPalletModel");
 
 function dumpError(err) {
     if (typeof err === 'object') {
@@ -41,61 +43,80 @@ function isUPC(strText) {
 
 router.post("/new", auth,  async (req, res) => {
     try {
-        let { username, productInp } = req.body;
+        let { username, inventoryItem } = req.body;
         if(!username){
             username="admin"
         }
         // console.log(user)
-        console.log(productInp)
+        // console.log(productInp)
+        try{
+            var DocCounter = await InventoryItems.countDocuments({})
+            DocCounter++;
+            // console.log(DocCounter)
+            const sku = "LID-" + DocCounter.toString().padStart(7, "0");
+            inventoryItem.inventory_id=sku
+        }catch(err){
+            res.json(err)
+        }
+
+        // var productString = JSON.stringify(productInp)
+        const newItem = new InventoryItems(inventoryItem)
+        const savedNewItem = await newItem.save();
         
-
-        var productString = JSON.stringify(productInp)
-
-        let options = {
-            mode: 'json',
-            pythonPath: process.env.PYTHON_PATH,
-            pythonOptions: ['-u'], // get print results in real-time 
-            scriptPath: path.join(__dirname, '../python'), //If you are having python_test.py script in same folder, then it's optional. 
-            args: [productString] //An argument which can be accessed in the script using sys.argv[1] 
-        };
-        PythonShell.run('shopifyUpload.py', options, function (err, result) {
-            if (err) throw err;
-
-            // console.log('result: ', result); 
-            // res.send(result[0])
-            // const response = await axios.post(api_url,productDetails)
-            
-            try {
-                const resp = result[0]
-                console.log(resp)
-                const newProduct = new Products({
-                    shopifyID: resp['product']['id'],
-                    upc: productInp.upc,
-                    sku: productInp.sku,
-                    title: productInp.title,
-                    retail: productInp.retail,
-                    discounted_price: productInp.discounted_price,
-                    image: productInp.image,
-                    description: productInp.description,
-                    condition: productInp.condition,
-                    quantity: productInp.quantity,
-                    categories: [""]
-                });
-                const savedProduct = newProduct.save();
-
-                const newUserProduct = new UserProducts({
-                    username: username,
-                    posted_products: resp['product']['id']
-                });
-
-                const saveUserProduct = newUserProduct.save();
-
-                res.json(resp)
-            } catch (err) {
-                dumpError(err)
-                res.status(500).json({ error: err.message })
+        const update = {
+            "$push": {
+                "items": inventoryItem.inventory_id
             }
-        });
+        }
+        let doc = await OutPallets.findOneAndUpdate({ opin: inventoryItem.opin }, update)
+        let doc2 = await InPallets.findOneAndUpdate({ ipin: inventoryItem.ipin }, update)
+
+        res.json(savedNewItem);
+        // let options = {
+        //     mode: 'json',
+        //     pythonPath: process.env.PYTHON_PATH,
+        //     pythonOptions: ['-u'], // get print results in real-time 
+        //     scriptPath: path.join(__dirname, '../python'), //If you are having python_test.py script in same folder, then it's optional. 
+        //     args: [productString] //An argument which can be accessed in the script using sys.argv[1] 
+        // };
+        // PythonShell.run('shopifyUpload.py', options, function (err, result) {
+        //     if (err) throw err;
+
+        //     // console.log('result: ', result); 
+        //     // res.send(result[0])
+        //     // const response = await axios.post(api_url,productDetails)
+
+        //     try {
+        //         const resp = result[0]
+        //         console.log(resp)
+        //         const newProduct = new Products({
+        //             shopifyID: resp['product']['id'],
+        //             upc: productInp.upc,
+        //             sku: productInp.sku,
+        //             title: productInp.title,
+        //             retail: productInp.retail,
+        //             discounted_price: productInp.discounted_price,
+        //             image: productInp.image,
+        //             description: productInp.description,
+        //             condition: productInp.condition,
+        //             quantity: productInp.quantity,
+        //             categories: [""]
+        //         });
+        //         const savedProduct = newProduct.save();
+
+        //         const newUserProduct = new UserProducts({
+        //             username: username,
+        //             posted_products: resp['product']['id']
+        //         });
+
+        //         const saveUserProduct = newUserProduct.save();
+
+        //         res.json(resp)
+        //     } catch (err) {
+        //         dumpError(err)
+        //         res.status(500).json({ error: err.message })
+        //     }
+        // });
     } catch (err) {
         dumpError(err)
         res.status(500).json({ error: err.message });
@@ -116,12 +137,12 @@ router.post("/productlist", auth,  async (req, res) => {
         if(!searchQuery){
             res.status(400).json({error:"Missing query data"})
         }
-        // console.log(req.body)
+        // console.log(marketplace)
         marketplaceString = JSON.stringify(marketplace)
         var query = searchQuery.toString();
-        console.log(query)
+        // console.log(query)
         // console.log("12")
-        
+
         if (isAsin(query)) {
             // console.log("gaitai")
             // let dir = path.join(__dirname, '../python');
@@ -136,7 +157,10 @@ router.post("/productlist", auth,  async (req, res) => {
                 args: [query, queryType, marketplaceString] //An argument which can be accessed in the script using sys.argv[1] 
             };
             PythonShell.run('apiController.py', options, function (err, result) {
-                if (err) throw err;
+                if (err){
+                    console.log(result)
+                    throw err;
+                }
                 console.log('result: ', result); 
                 res.send(result[0])
             });
@@ -182,34 +206,30 @@ router.post("/productlist", auth,  async (req, res) => {
     }
 });
 
-router.get("/getsku", auth, async (req, res) => {
-    var DocCounter = await Products.countDocuments({})
-    DocCounter++;
-    console.log(DocCounter)
-    const sku = "BTZ" + DocCounter.toString().padStart(7, "0");
+router.get("/getlplusid", auth, async (req, res) => {
+    try{
+        var DocCounter = await InventoryItems.countDocuments({})
+        DocCounter++;
+        console.log(DocCounter)
+        const sku = "LID-" + DocCounter.toString().padStart(7, "0");
+        
+        res.json({
+            sku: sku
+        });
+    }catch(err){
+        console.log(err)
+        res.json(err)
+    }
     
+})
+
+router.get("/", auth, async (req, res) => {
+    // const temp = req.params.username
+    // const inventoryItems = await InventoryItems.find({username:temp});
+    const inventoryItems = await InventoryItems.find();
     res.json({
-        sku: sku
+        inventoryItems
     });
-    
-})
-
-router.post("/dashboarddata", auth, async (req, res) =>{
-    const { username } = req.body;
-    // // console.log(username)
-    // const userPostedProductsCount = await UserProducts.countDocuments({username:username})
-    // const totPostedProductsCount = await Products.countDocuments({})
-
-    // const resData = await UserProducts.aggregate([
-    //     {$group :{_id:"$username","count":{$sum:1}}},
-    //     {$sort:{"count":-1}},
-    //     {$limit : 5}]
-    // )
-    // const bestPoster = resData[0]._id
-    // const bestPosterCount=resData[0].count
-    res.json({})
-    // res.json({userPostedProductsCount,totPostedProductsCount,bestPoster,bestPosterCount})
-})
-
+  }); 
 
 module.exports = router;

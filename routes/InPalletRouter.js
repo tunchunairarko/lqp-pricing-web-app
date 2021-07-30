@@ -91,6 +91,7 @@ router.post("/create", auth, async (req, res) => {
         }
       }
       let doc = await Truckload.findOneAndUpdate({ loadNo: load_no }, update)
+      
 
       const update2 = {
         "$push": {

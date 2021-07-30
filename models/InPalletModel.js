@@ -7,7 +7,8 @@ const palletSchema = new mongoose.Schema({
   load_no: {type: String},
   username:{type: String},
   retailer: {type: String},
-  cost_price: {type: String}
+  cost_price: {type: String},
+  items: [{type: String}]
 },{ timestamps: true });
 
 module.exports = InPallets = mongoose.model("incoming_pallets", palletSchema);

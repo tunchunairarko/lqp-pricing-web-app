@@ -124,7 +124,7 @@ export default function CreateTruckLoad() {
                 if (tokenResponse.data) {
                     var name = cookies.username
                     var retailer_short = curRetailer.substring(0, 3)
-                    let data = { name, curRetailer, retailer_short }
+                    let data = { username:name, retailer:curRetailer, retailer_short:retailer_short }
                     try{
                         const resp = await Axios.post(`/api/truckloads/create`, data, { headers: { "x-auth-token": userData.token } });
                         const result = resp.data

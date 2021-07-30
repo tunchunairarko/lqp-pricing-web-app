@@ -12,8 +12,7 @@ export default function OpinIpinFields({ipin,opin,setOPIN,load_no,location, setE
     const [cookies] = useCookies(["user"]);
     const [opinList,setOPINList] = useState([])
     
-
-    
+  
 
     useEffect(() => {
         const compMount = async (e) => {

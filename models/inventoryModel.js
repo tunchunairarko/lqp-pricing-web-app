@@ -1,22 +1,27 @@
 const mongoose = require("mongoose");
 mongoose.set('useFindAndModify', false);
 
-const productSchema = new mongoose.Schema({
-    loadID:{type:String,required:true},
+const inventorySchema = new mongoose.Schema({
+    username: {type:String,required: true},
+    load_no:{type:String,required:true},
     ipin:{type:String,required:true},
-    inventoryID:{type:String,required:true},
+    opin:{type:String,required:true},
+    location:{type:String,required:true},
+    inventory_id:{type:String,required:true},
     upc: { type: String, required: true },
     title: {type: String},
-    unit_price: {type: String},
+    unit_retail: {type: String},
     cost_price: {type: String},
     image: {type: String},
-    description: {type: String},
     condition: {type:String},
-    categories: [{type: String}],
-    quantity: {type: String}
+    quantity: {type: String},
+    discount: {type:String},
+    ext_retail: {type:String},
+    sale_price: {type:String},
+    retailer: {type:String}
 },{ timestamps: true });
 
-module.exports = Products = mongoose.model("products", productSchema);
+module.exports = InventoryItems = mongoose.model("inventoryItems", inventorySchema);
 
 
 

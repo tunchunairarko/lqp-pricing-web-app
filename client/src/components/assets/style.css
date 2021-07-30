@@ -130,8 +130,9 @@ body{
      padding: 0px 10px 0px 10px;
  }
 
-.card-stats{
+.card-locations{
     padding: 10px 10px 0px!important;
+    margin-right: 5px;
 }
 .dashboard-card-footer{
     background-color:rgba(255,255,255)!important;
@@ -215,4 +216,46 @@ body{
     border: 1px solid;
     padding:5px;
     margin-bottom: 20px;
+}
+
+
+/* #manifest_table tbody {
+    display: block;
+    height:400px;
+    overflow-y:scroll;
+} */
+.manifestTitleEle{
+    display: block;
+    max-height: 150px;
+    overflow: hidden;
+    /* white-space: nowrap; */
+    text-overflow: ellipsis;
+}
+
+
+/* #manifest_table thead{
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    }
+    #manifest_table tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    } */
+
+
+.search-label{
+    min-width: 100%;
+}
+
+.location-card-title{
+    text-align: center!important;
+    font-size: 2.8em!important;
+    font-weight: 700!important;
+    color: #16a085;
+}
+
+.card-locations:hover{
+    border-color: #3498db!important;
 }

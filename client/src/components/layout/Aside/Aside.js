@@ -76,13 +76,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
               </Link>
             </MenuItem> */}
 
-            <MenuItem
+            {/* <MenuItem
               icon={<FaTachometerAlt />} >
 
               <Link className="nav-link" to={`/settings`}>
                 Settings
               </Link>
-            </MenuItem>
+            </MenuItem> */}
 
 
           </Menu>
@@ -100,7 +100,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
                 </Link>
               </MenuItem>
               <MenuItem>
-                <Link className="nav-link" to={`/settings`}>
+                <Link className="nav-link" to={`/location/report`}>
                   Location Report
                 </Link>
               </MenuItem>
@@ -122,8 +122,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
                 </Link>
               </MenuItem>
               <MenuItem>
-                <Link className="nav-link" to={`/settings`} >
+                <Link className="nav-link" to={`/truckload/report`} >
                   List Truckloads
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link className="nav-link" to={`/incomingpallet/report`} >
+                  Incoming pallet report
                 </Link>
               </MenuItem>
             </SubMenu>
@@ -144,13 +149,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
               </MenuItem>
 
               <MenuItem>
-                <Link className="nav-link" to={`/settings`} >
+                <Link className="nav-link" to={`/outboundpallet/report`} >
                   Outbound report
                 </Link>
               </MenuItem>
 
               <MenuItem>
-                <Link className="nav-link" to={`/settings`} >
+                <Link className="nav-link" to={`/inventory/items`} >
                   Item inventory
                 </Link>
               </MenuItem>

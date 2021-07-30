@@ -14,14 +14,13 @@ import { useFileUpload } from "use-file-upload";
 // import Camera from 'react-html5-camera-photo';
 // import 'react-html5-camera-photo/build/css/index.css';
 
-export default function DownloadedProductData({ title, upc, retail, image, setTitle, setRetail, setUpc, setImage }) {
+export default function DownloadedProductData({ title, upc, retail, image, setTitle, setRetail, setUpc, setImage, costPrice, setCostPrice, retailer, setRetailer, setInventoryId, handleInventoryUpdate,condition,setCondition,quantity,setQuantity,discount,setDiscount }) {
     const { userData } = useContext(UserContext);
     const [cookies] = useCookies(["user"]);
     const [error, setError] = useState();
     const [successNotice, setSuccessNotice] = useState();
-    const [quantity, setQuantity] = useState(1);
-    const [discount, setDiscount] = useState(50);
-    const [condition, setCondition] = useState('New');
+    
+    // const [condition, setCondition] = useState('New');
     const [files, selectFiles] = useFileUpload();
     // const [cameraState, setCameraState] = useState(false);
 
@@ -44,51 +43,90 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
         setTitle("")
         setUpc("")
         setRetail("")
-        
+
         setImage("https://cdn.shopify.com/s/files/1/0514/3520/8854/files/surplus-auction.png?v=1609197903")
         setDiscount("50")
         setQuantity("1")
         setCondition("New")
 
     }
-    const postProduct = async (e) => {
+    // const postProduct = async (e) => {
+    //     e.preventDefault()
+    //     try {
+    //         if (title === "" || retail === "" || quantity === "" || image === "" || discount === "") {
+    //             setError("Please fill up all the missing fields")
+    //         }
+    //         else {
+    //             const res = await Axios.get(`/api/products/getsku`, { headers: { "x-auth-token": userData.token } });
+    //             var discounted_price = parseFloat(retail) * parseInt(discount) / 100;
+    //             // console.log(res.data)
+    //             if (res.data) {
+    //                 var sku = res.data.sku;
+    //                 const product = {
+    //                     title: title,
+    //                     upc: upc,
+    //                     sku: sku,
+
+    //                     image: image,
+    //                     retail: retail.toString(),
+    //                     condition: condition,
+    //                     discounted_price: discounted_price.toString(),
+    //                     quantity: quantity,
+    //                     categories: []
+    //                 }
+    //                 // console.log(product)
+    //                 const username = cookies.username;
+    //                 const productInp = product;
+    //                 let data = { username, productInp }
+    //                 // console.log(data)
+    //                 const resp = await Axios.post(`/api/products/new`, data, { headers: { "x-auth-token": userData.token } });
+    //                 const result = resp.data
+    //                 try {
+    //                     setSuccessNotice("Product uploaded successfully. Posting id: " + result.product.id + ". SKU: " + sku);
+    //                     clearAll();
+    //                 } catch (err) {
+    //                     setError("Error in posting product")
+    //                 }
+    //             }
+
+    //         }
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //         // err.response.data.msg && setError(err.response.data.msg);
+    //     }
+    // }
+    const addToManifest = async (e) => {
         e.preventDefault()
         try {
             if (title === "" || retail === "" || quantity === "" || image === "" || discount === "") {
                 setError("Please fill up all the missing fields")
             }
             else {
-                const res = await Axios.get(`/api/products/getsku`, { headers: { "x-auth-token": userData.token } });
-                var discounted_price = parseFloat(retail) * parseInt(discount) / 100;
+                handleInventoryUpdate(true)
+                // const res = await Axios.get(`/api/products/getlplusid`, { headers: { "x-auth-token": userData.token } });
+                // var discounted_price = parseFloat(retail) * parseInt(discount) / 100;
                 // console.log(res.data)
-                if (res.data) {
-                    var sku = res.data.sku;
-                    const product = {
-                        title: title,
-                        upc: upc,
-                        sku: sku,
-                        
-                        image: image,
-                        retail: retail.toString(),
-                        condition: condition,
-                        discounted_price: discounted_price.toString(),
-                        quantity: quantity,
-                        categories: []
-                    }
-                    // console.log(product)
-                    const username = cookies.username;
-                    const productInp = product;
-                    let data = { username, productInp }
-                    // console.log(data)
-                    const resp = await Axios.post(`/api/products/new`, data, { headers: { "x-auth-token": userData.token } });
-                    const result = resp.data
-                    try {
-                        setSuccessNotice("Product uploaded successfully. Posting id: " + result.product.id + ". SKU: " + sku);
-                        clearAll();
-                    } catch (err) {
-                        setError("Error in posting product")
-                    }
-                }
+                // if (res.data) {
+                    // var sku = res.data.sku;
+                    // setInventoryId(sku)
+                    // handleInventoryUpdate(true)
+                    // const product = {
+
+                    //     title: title,
+                    //     upc: upc,
+                    //     inventory_id: sku,
+
+                    //     image: image,
+                    //     retail: retail.toString(),
+                    //     costPrice: costPrice.toString(),
+                    //     condition: condition,
+                    //     quantity: quantity,
+                    //     retailer: retailer,
+                    //     // categories: []
+                    // }
+
+                // }
 
             }
         }
@@ -97,6 +135,8 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
             // err.response.data.msg && setError(err.response.data.msg);
         }
     }
+    /////////////////////////////////////////
+    ////////////////////////////////////////
     useEffect(() => {
         if (error) {
             alert.error(<div style={{ 'font-size': '0.70em' }}>{error}</div>)
@@ -212,6 +252,14 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
                                 </Col>
                             </Form.Group>
 
+                            <Form.Group as={Row} controlId="cPriceText">
+                                <Form.Label column sm="2">
+                                    Cost price
+                                </Form.Label>
+                                <Col sm="10">
+                                    <Form.Control placeholder="Enter Cost" value={costPrice} onChange={(e) => setCostPrice(e.target.value)} />
+                                </Col>
+                            </Form.Group>
                             <Form.Group as={Row} controlId="priceText">
                                 <Form.Label column sm="2">
                                     Retail
@@ -231,7 +279,7 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
                                     Qty
                                 </Form.Label>
                                 <Col sm="3">
-                                    <Form.Control placeholder="Enter Qty" value={quantity} onChange={(e) => setDiscount(e.target.value)} />
+                                    <Form.Control placeholder="Enter Qty" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                                 </Col>
                                 <Col sm="2">
                                     <ButtonGroup id="qtyButtonGroup" aria-label="Basic example">
@@ -261,11 +309,17 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
                                     </Dropdown>
                                 </Col>
                                 <Form.Label column sm="2">
+                                    Retailer
+                                </Form.Label>
+                                <Col sm="4">
+                                    <Form.Control placeholder="Enter retailer/brand" value={retailer} onChange={(e) => setRetailer(e.target.value)} />
+                                </Col>
+                                {/* <Form.Label column sm="2">
                                     Categories
                                 </Form.Label>
                                 <Col sm="4">
                                     <Form.Control placeholder="Separate by comma (,)" disabled />
-                                </Col>
+                                </Col> */}
                             </Form.Group>
                             {/* <Form.Group as={Row} controlId="formPlaintextEmail">
                                 <Form.Label column sm="2">
@@ -298,7 +352,7 @@ export default function DownloadedProductData({ title, upc, retail, image, setTi
                             </Form.Group> */}
                             <Form.Group as={Row} controlId="formPlaintextEmail">
                                 <Col sm="6" className="mt-2">
-                                    <Button variant="success" block onClick={postProduct}><FaUpload /> Post Product </Button>
+                                    <Button variant="success" block onClick={addToManifest}><FaUpload /> Add to manifest </Button>
                                 </Col>
                                 <Col sm="6" className="mt-2">
                                     <Button variant="danger" block onClick={clearAll}><FaBroom /> Clear All </Button>
