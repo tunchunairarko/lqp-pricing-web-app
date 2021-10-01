@@ -51,6 +51,8 @@ export default function PricingModule() {
         }
     }, [errorNotice])
 
+
+
     useEffect(() => {
         const compMount = async (e) =>{
             if (opin) {
@@ -75,8 +77,26 @@ export default function PricingModule() {
                             setIPIN(opinRes.data.item.ipin)                         
                             
                         } catch (error) {
-                            setErrorNotice("Error retrieving catalogs")
+                            setErrorNotice("Error retrieving opins")
                         }
+
+                        // if(compLoad===true){
+                            localStorage.setItem("curOpin",opin)
+                            try {
+                                const inventoryRes = await Axios.get(
+                                    // "/api/products/"+cookies.username,
+                                    "/api/products/getopin/" + opin,
+                                    { headers: { "x-auth-token": token } }
+                                )
+                                const data=inventoryRes.data.inventoryItems
+                                setManifestData(data)                    
+                
+                            } catch (error) {
+                                setErrorNotice("Error retrieving manifest items")
+                            }
+                        // }
+                        
+                        
                     }
                 }
             }
@@ -117,24 +137,53 @@ export default function PricingModule() {
         ipinChanged()
     },[ipin])
 
+    /////////////////////
+    //load data from localstorage
     useEffect(()=>{
-        const onLoad = () =>{
-            if(localStorage.getItem("manifestData")!==null){
-                setManifestData(JSON.parse(localStorage.getItem("manifestData")))
-                setCompLoad(true)
+        const onLoad = async() =>{
+            if(localStorage.getItem("curOpin"!==null)){
+                setOPIN(localStorage.getItem("curOpin"))
+                let token = localStorage.getItem("auth-token");
+                try {
+                    const inventoryRes = await Axios.get(
+                        // "/api/products/"+cookies.username,
+                        "/api/products/getopin/" + localStorage.getItem("curOpin"),
+                        { headers: { "x-auth-token": token } }
+                    )
+                    const data=inventoryRes.data.inventoryItems
+                    setManifestData(data)
+                    setCompLoad(true)                    
+    
+                } catch (error) {
+                    setErrorNotice("Error retrieving manifest items")
+                }
+                
+                
             }
+            // if(localStorage.getItem("manifestData")!==null){
+            //     setManifestData(JSON.parse(localStorage.getItem("manifestData")))
+            //     setCompLoad(true)
+            // }
         }  
         onLoad()
     },[])
-    useEffect(()=>{
-        const updateLocalDb = () =>{            
-            if(compLoad===true){
-                var dat=JSON.stringify(manifestData)
-                localStorage.setItem("manifestData",dat)
-            }            
-        }
-        updateLocalDb()
-    },[manifestData])
+    // useEffect(()=>{
+    //     const updateLocalDb = () =>{            
+    //         // if(compLoad===true){
+    //         //     var dat=JSON.stringify(manifestData)
+    //         //     localStorage.setItem("manifestData",dat)
+    //         // }            
+    //     }
+    //     updateLocalDb()
+    // },[manifestData])
+    //end localstorage data
+    /////////////////
+    // useEffect(()=>{
+    //     const updateManifest = async() =>{
+            
+    //     }
+    //     updateManifest()
+    // },[opin])
     
     const handleInventoryUpdate = async (trigger) =>{
         if(trigger==true){

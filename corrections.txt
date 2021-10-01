@@ -1,0 +1,7 @@
+- When going to the manifest maker doesn’t save items from the OPIN (it clears the items when you click out of the tab and when re-entering the OPIN it doesn’t save the previous items)
+- The prices are sometimes wrong when using the search
+
+- When exporting any .csv, the manifest shows ALL/Random items and truckloads/reports (not just the items specific to that OPIN).
+
+- [DONE] When exporting an outbound report none of the items are correct with what was previously added, it doesn’t save what you added to it (No matter what report is exported, the manifests show the same thing)
+- [DONE] The manifests have a problem with certain columns of not showing the information, but rather “[object Object]”, they also only give  multiples of certain items.

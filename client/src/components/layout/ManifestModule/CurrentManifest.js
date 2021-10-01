@@ -22,6 +22,9 @@ export default function CurrentManifest({manifestData,setManifestData}) {
     
     const imageFormatter=(cell, row)=>{
         return (<Image src={cell} fluid/>) ;
+        // <span className="manifestTitleEle">
+        //         {cell}
+        //     </span>
     }
     const cellEdit = cellEditFactory(
         {
@@ -110,19 +113,6 @@ export default function CurrentManifest({manifestData,setManifestData}) {
         text: 'Image',
         formatter:imageFormatter
     },
-    // {
-    //     dataField: 'load_no',
-    //     text: 'Truckload'
-    // }, {
-    //     dataField: 'location',
-    //     text: 'Location'
-    // }, {
-    //     dataField: 'ipin',
-    //     text: 'IPIN'
-    // }, {
-    //     dataField: 'opin',
-    //     text: 'OPIN'
-    // }, 
     {
         dataField: 'inventory_id',
         text: 'Liquidation ID'
@@ -173,17 +163,6 @@ export default function CurrentManifest({manifestData,setManifestData}) {
                             data={manifestData ? manifestData : []}
                             columns={columns}
                             search
-                            // exportCSV={ manifestData >0 ? (
-                            //     {
-                            //         fileName: datestring+'_'+manifestData[0].opin+'.csv',
-                            //         // ignoreHeader: true,
-                            //         noAutoBOM: false
-                            //     }
-                            // ):{
-                            //     fileName: 'export.csv',
-                            //     // ignoreHeader: true,
-                            //     noAutoBOM: false
-                            // } }
                         >
                             {
                                 (props) => (
@@ -198,15 +177,13 @@ export default function CurrentManifest({manifestData,setManifestData}) {
                                         </ButtonToolbar>
                                         <div className="table-responsive">
                                             <BootstrapTable
-                                                id="manifest_table"
-                                                keyField='inventory_id'
-                                                data={manifestData ? manifestData : []}
-                                                columns={columns}
+                                                {...props.baseProps}
+                                                id="manifest_table"                                                
                                                 selectRow={selectRow}
                                                 cellEdit={cellEdit}
                                                 filter={filterFactory()}
                                                 pagination={paginationFactory()}
-                                                {...props.baseProps}
+                                                
                                             />
                                         </div>
                                     </Fragment>

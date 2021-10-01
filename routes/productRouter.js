@@ -226,10 +226,18 @@ router.get("/getlplusid", auth, async (req, res) => {
     
 })
 
+router.get("/getopin/:opin", auth, async(req,res)=>{
+    const temp = req.params.opin
+    const inventoryItems = await InventoryItems.find({ opin: temp },'-_id inventory_id opin ipin upc title retailer condition cost_price unit_retail quantity discount ext_retail sale_price load_no location image');
+    res.json({
+        inventoryItems
+    });
+})
 router.get("/", auth, async (req, res) => {
     // const temp = req.params.username
     // const inventoryItems = await InventoryItems.find({username:temp});
     const inventoryItems = await InventoryItems.find();
+    
     res.json({
         inventoryItems
     });

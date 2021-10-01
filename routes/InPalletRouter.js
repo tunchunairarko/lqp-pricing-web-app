@@ -49,11 +49,15 @@ router.get("/", auth, async (req, res) => {
 router.get("/getitem/:ipin", auth, async (req, res) => {
   // Access userId via: req.params.userId
   // Access bookId via: req.params.bookId
-  const temp = req.params.ipin
+  try{
+    const temp = req.params.ipin
   const item = await InPallet.findOne({ ipin: temp });
   res.json({
     item
   });
+  }catch(err){
+    res.json({err})
+  }
 });
 
 
