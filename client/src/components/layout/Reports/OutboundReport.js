@@ -111,7 +111,7 @@ export default function OutboundReport() {
         for (var j = 0; j < selected.length; j++) {
             var tempid = selected[j]
             setOPINData(opinData => (
-                opinData.filter((value, i) => value.inventory_id !== tempid)
+                opinData.filter((value, i) => value.opin !== tempid)
             ))
         }
     }

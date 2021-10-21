@@ -108,7 +108,7 @@ export default function ListTruckloads() {
             //     }
             // }
             setLoadData(loadData => (
-                loadData.filter((value, i) => value.inventory_id !== tempid)
+                loadData.filter((value, i) => value.loadNo !== tempid)
             ))
         }
     }

@@ -87,15 +87,8 @@ export default function IncomingPalletReport() {
     const handleItemDelete = () => {
         for (var j = 0; j < selected.length; j++) {
             var tempid = selected[j]
-            // for(var k=0; k<ipinData.length; k++){
-            //     if(ipinData[k].inventory_id===tempid){
-            //         setIPINData(ipinData =>(
-            //             ipinData.filter((value,i)=>i!==k)
-            //         ))
-            //     }
-            // }
             setIPINData(ipinData => (
-                ipinData.filter((value, i) => value.inventory_id !== tempid)
+                ipinData.filter((value, i) => value.ipin !== tempid)
             ))
         }
     }
