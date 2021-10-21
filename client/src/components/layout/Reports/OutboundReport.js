@@ -218,7 +218,6 @@ export default function OutboundReport() {
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
                             <ExportCSVButton { ...props.csvProps }> <FaFileCsv/>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={() => handleItemDelete}><FaMinusSquare /> Delete</Button>
-                                <Button variant="danger" onClick={() => setOPINData([])}><FaTrashAlt /> Clear Manifest</Button>
 
                             </ButtonToolbar>
                             <div className="table-responsive">
