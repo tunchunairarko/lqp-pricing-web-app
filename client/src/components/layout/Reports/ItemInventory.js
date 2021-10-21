@@ -7,7 +7,7 @@ import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
 import { Button, ButtonToolbar, Image } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare } from 'react-icons/fa';
@@ -19,7 +19,7 @@ export default function ItemInventory() {
     const [cookies] = useCookies(["user"]);
     const alert = useAlert()
     const [itemInventoryData,setItemInventoryData] = useState([])
-
+    const { ExportCSVButton } = CSVExport;
     const [errorNotice, setErrorNotice] = useState()
     const [successNotice, setSuccessNotice] = useState()
 
@@ -32,38 +32,38 @@ export default function ItemInventory() {
         d.getHours() + "_" + d.getMinutes();
 
     /////////////////////////////
-    useEffect(()=>{
-        const compMount = async() =>{
-            let token = localStorage.getItem("auth-token");
-            if (token == null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-            else {
-                const tokenResponse = await Axios.post(
-                    "/api/users/tokenIsValid",
-                    null,
-                    { headers: { "x-auth-token": token } }
-                );
-                if (tokenResponse.data) {
-                    try {
-                        const productRes = await Axios.get(
-                            // "/api/products/"+cookies.username,
-                            "/api/products/",
-                            { headers: { "x-auth-token": token } }
-                        )
-                        console.log(productRes)
-                        setItemInventoryData(productRes.data.inventoryItems)                         
+    // useEffect(()=>{
+    //     const compMount = async() =>{
+    //         let token = localStorage.getItem("auth-token");
+    //         if (token == null) {
+    //             localStorage.setItem("auth-token", "");
+    //             token = "";
+    //         }
+    //         else {
+    //             const tokenResponse = await Axios.post(
+    //                 "/api/users/tokenIsValid",
+    //                 null,
+    //                 { headers: { "x-auth-token": token } }
+    //             );
+    //             if (tokenResponse.data) {
+    //                 try {
+    //                     const productRes = await Axios.get(
+    //                         // "/api/products/"+cookies.username,
+    //                         "/api/products/",
+    //                         { headers: { "x-auth-token": token } }
+    //                     )
+    //                     // console.log(productRes)
+    //                     setItemInventoryData(productRes.data.inventoryItems)                         
                         
-                    } catch (error) {
-                        setErrorNotice("Error retrieving inventory items")
-                    }
-                }
+    //                 } catch (error) {
+    //                     setErrorNotice("Error retrieving inventory items")
+    //                 }
+    //             }
                 
-            }
-        }
-        compMount()
-    },[])
+    //         }
+    //     }
+    //     compMount()
+    // },[])
     const imageFormatter = (cell, row) => {
         return (<Image src={cell} fluid />);
     }
@@ -155,10 +155,6 @@ export default function ItemInventory() {
         formatter: imageFormatter
     },
     {
-        dataField: 'username',
-        text: 'Listing user'
-    },
-    {
         dataField: 'load_no',
         text: 'Truckload'
     }, {
@@ -231,7 +227,7 @@ export default function ItemInventory() {
                             <SearchBar apiRoute="products" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                                <MyExportCSV {...props.csvProps} />
+                            <ExportCSVButton { ...props.csvProps }><FaFileCsv/>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
                                 <Button variant="danger" onClick={()=>setItemInventoryData([])}><FaTrashAlt /> Clear Manifest</Button>
 

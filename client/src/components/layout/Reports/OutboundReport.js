@@ -5,7 +5,7 @@ import { useAlert } from 'react-alert';
 import Axios from "axios";
 import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
-import { Button, ButtonToolbar, Image } from 'react-bootstrap';
+import { Badge, Button, ButtonToolbar, Image } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import SearchBar from './SearchBar';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
@@ -13,7 +13,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare, FaDownload } from 'react-icons/fa';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import OutboundInventoryItemsExport from './OutboundInventoryItemsExport'
-import ToolkitProvider from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 
 //////////////////////
 
@@ -26,7 +26,7 @@ export default function OutboundReport() {
     const [cookies] = useCookies(["user"]);
     const alert = useAlert()
     const [opinData, setOPINData] = useState([])
-
+    const { ExportCSVButton } = CSVExport;
     const [errorNotice, setErrorNotice] = useState()
     const [successNotice, setSuccessNotice] = useState()
 
@@ -39,41 +39,47 @@ export default function OutboundReport() {
         d.getHours() + "_" + d.getMinutes();
 
     /////////////////////////////
-    useEffect(() => {
-        const compMount = async () => {
-            let token = localStorage.getItem("auth-token");
-            if (token == null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-            else {
-                const tokenResponse = await Axios.post(
-                    "/api/users/tokenIsValid",
-                    null,
-                    { headers: { "x-auth-token": token } }
-                );
-                if (tokenResponse.data) {
-                    try {
-                        const opinRes = await Axios.get(
-                            // "/api/products/"+cookies.username,
-                            "/api/outpallet/",
-                            { headers: { "x-auth-token": token } }
-                        )
-                        // console.log(opinRes)
-                        for (var i = 0; i < opinRes.data.opins.length; i++) {
-                            opinRes.data.opins[i].downloadLink = <FaDownload />
-                        }
-                        setOPINData(opinRes.data.opins)
+    // useEffect(() => {
+    //     const compMount = async () => {
+    //         let token = localStorage.getItem("auth-token");
+    //         if (token == null) {
+    //             localStorage.setItem("auth-token", "");
+    //             token = "";
+    //         }
+    //         else {
+    //             const tokenResponse = await Axios.post(
+    //                 "/api/users/tokenIsValid",
+    //                 null,
+    //                 { headers: { "x-auth-token": token } }
+    //             );
+    //             if (tokenResponse.data) {
+    //                 try {
+    //                     const opinRes = await Axios.get(
+    //                         // "/api/products/"+cookies.username,
+    //                         "/api/outpallet/",
+    //                         { headers: { "x-auth-token": token } }
+    //                     )
+    //                     // console.log(opinRes)
+    //                     for (var i = 0; i < opinRes.data.opins.length; i++) {
+    //                         opinRes.data.opins[i].downloadLink = <FaDownload />
+    //                         if('items' in opinRes.data.opins[i] && opinRes.data.opins[i].items.length>0){
+    //                             opinRes.data.opins[i].itemsDesign=[]
+    //                             for(var j=0; j<opinRes.data.opins[i].items.length; j++){
+    //                                 opinRes.data.opins[i].itemsDesign.push(<Badge style={{ backgroundColor: "#f1c40f" }} pill bg="primary">{opinRes.data.opins[i].items[j]}</Badge>)
+    //                             }
+    //                         }
+    //                     }
+    //                     setOPINData(opinRes.data.opins)
 
-                    } catch (error) {
-                        setErrorNotice("Error retrieving opins")
-                    }
-                }
+    //                 } catch (error) {
+    //                     setErrorNotice("Error retrieving opins")
+    //                 }
+    //             }
 
-            }
-        }
-        compMount()
-    }, [])
+    //         }
+    //     }
+    //     compMount()
+    // }, [])
     const downloadFormatter = (cell, row) => {
         
         return (
@@ -110,38 +116,20 @@ export default function OutboundReport() {
         }
     }
 
-    const MyExportCSV = (props) => {
-        const handleClick = () => {
-            d = new Date();
-            datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
-                d.getHours() + "_" + d.getMinutes();
-            props.onExport();
-        };
-        return (
-            <Button variant="success" className="mr-2" onClick={handleClick}><FaFileCsv /> Export as CSV</Button>
-        );
-    };
-
     const selectRow = {
         mode: 'checkbox',
         clickToSelect: true,
         style: { backgroundColor: '#c8e6c9' },
         onSelect: (row, isSelect, rowIndex, e) => {
-            // console.log(isSelect)
             if (isSelect) {
                 setSelected(selected => [...selected, row.opin])
             }
             else {
-                // console.log(selected.indexOf(row.inventory_id))
                 setSelected(selected => (
                     selected.filter((value, i) => i !== selected.indexOf(row.opin))
                 ))
             }
             console.log(selected)
-            // console.log(row.inventory_id);
-            // console.log(isSelect);
-            // console.log(rowIndex);
-            // console.log(e);
         },
         onSelectAll: (isSelect, rows, e) => {
             if (isSelect) {
@@ -153,9 +141,6 @@ export default function OutboundReport() {
                 setSelected([])
             }
             console.log(selected)
-            // console.log(isSelect);
-            // console.log(rows);
-            // console.log(e);
         }
     };
     const columns = [{
@@ -171,16 +156,23 @@ export default function OutboundReport() {
     },
     {
         dataField: 'ipin',
-        text: 'IPIN'
+        text: 'IPIN',
+        
     },
     {
         dataField: 'sale_price',
         text: 'Sale price'
     },
     {
+        dataField: 'itemsDesign',
+        text: 'Inventory items',
+        csvExport: false
+    },
+    {
         dataField: 'downloadLink', //NEED TO DECIDE WHAT TO DO FROM HERE
         text: '',
-        formatter: downloadFormatter
+        formatter: downloadFormatter,
+        csvExport: false
     }
 
     ];
@@ -188,6 +180,19 @@ export default function OutboundReport() {
         // for (var i = 0; i < respData.opins.length; i++) {
         //     respData.opins[i].ipinCount = respData.opins[i].ipins.length
         // }
+        for (var i = 0; i < respData.opins.length; i++) {
+            if('sale_price' in respData.opins[i] !==true){
+                respData.opins[i].sale_price=0.0
+            }
+            respData.opins[i].downloadLink = <FaDownload />
+            if('items' in respData.opins[i] && respData.opins[i].items.length>0){
+                // console.log("lkas")
+                respData.opins[i].itemsDesign=[]
+                for(var j=0; j<respData.opins[i].items.length; j++){
+                    respData.opins[i].itemsDesign.push(<Badge style={{ backgroundColor: "#f1c40f" }} pill bg="primary">{respData.opins[i].items[j]}</Badge>)
+                }
+            }
+        }
         setOPINData(respData.opins)
     }
     return (
@@ -198,11 +203,12 @@ export default function OutboundReport() {
                 data={opinData ? opinData : []}
                 columns={columns}
                 search
-            // exportCSV={ {
-            //     fileName: 'export.csv',
-            //     // ignoreHeader: true,
-            //     noAutoBOM: false
-            // }
+                exportCSV={ {
+                    fileName: 'export.csv',
+                    // ignoreHeader: true,
+                    noAutoBOM: false,
+                    onlyExportSelection: true
+                }}
             >
                 {
                     (props) => (
@@ -210,7 +216,7 @@ export default function OutboundReport() {
                             <SearchBar apiRoute="outpallet" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                                <MyExportCSV {...props.csvProps} />
+                            <ExportCSVButton { ...props.csvProps }> <FaFileCsv/>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={() => handleItemDelete}><FaMinusSquare /> Delete</Button>
                                 <Button variant="danger" onClick={() => setOPINData([])}><FaTrashAlt /> Clear Manifest</Button>
 

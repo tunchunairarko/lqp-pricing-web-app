@@ -17,61 +17,62 @@ import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 export default function ListTruckloads() {
     const { ExportCSVButton } = CSVExport;
     const alert = useAlert()
-    const [loadData,setLoadData] = useState([])
+    const [loadData, setLoadData] = useState([])
 
     const [errorNotice, setErrorNotice] = useState()
     const [successNotice, setSuccessNotice] = useState()
 
     /////////////////////////////
-    
+
     const [selected, setSelected] = useState([])
-    
+
     var d = new Date();
     var datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
         d.getHours() + "_" + d.getMinutes();
 
     /////////////////////////////
-    useEffect(()=>{
-        const compMount = async() =>{
-            let token = localStorage.getItem("auth-token");
-            if (token == null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-            else {
-                const tokenResponse = await Axios.post(
-                    "/api/users/tokenIsValid",
-                    null,
-                    { headers: { "x-auth-token": token } }
-                );
-                if (tokenResponse.data) {
-                    try {
-                        const loadRes = await Axios.get(
-                            // "/api/products/"+cookies.username,
-                            "/api/truckloads/",
-                            { headers: { "x-auth-token": token } }
-                        )
-                        for(var i=0; i<loadRes.data.truckloads.length; i++){
-                            // var temp=""
-                            // var tempPallets=loadRes.data.truckloads[i].pallets
-                            // console.log(tempPallets)
-                            for (var j=0; j<loadRes.data.truckloads[i].pallets.length; j++){
-                                loadRes.data.truckloads[i].pallets[j]=<Badge style={{backgroundColor:"#f1c40f"}} pill bg="primary">{loadRes.data.truckloads[i].pallets[j]}</Badge>
-                            }
-                            // console.log(temp)
-                            // loadRes.data.truckloads[i].palletString=temp
-                        }
-                        setLoadData(loadRes.data.truckloads)                         
-                        
-                    } catch (error) {
-                        setErrorNotice("Error retrieving truckloads")
-                    }
-                }
-                
-            }
-        }
-        compMount()
-    },[])
+    // useEffect(()=>{
+    //     const compMount = async() =>{
+    //         let token = localStorage.getItem("auth-token");
+    //         if (token == null) {
+    //             localStorage.setItem("auth-token", "");
+    //             token = "";
+    //         }
+    //         else {
+    //             const tokenResponse = await Axios.post(
+    //                 "/api/users/tokenIsValid",
+    //                 null,
+    //                 { headers: { "x-auth-token": token } }
+    //             );
+    //             if (tokenResponse.data) {
+    //                 try {
+    //                     const loadRes = await Axios.get(
+    //                         // "/api/products/"+cookies.username,
+    //                         "/api/truckloads/",
+    //                         { headers: { "x-auth-token": token } }
+    //                     )
+    //                     for(var i=0; i<loadRes.data.truckloads.length; i++){
+    //                         // var temp=""
+    //                         // var tempPallets=loadRes.data.truckloads[i].pallets
+    //                         // console.log(tempPallets)
+    //                         loadRes.data.truckloads[i].palletDesign=[]
+    //                         for (var j=0; j<loadRes.data.truckloads[i].pallets.length; j++){
+    //                             loadRes.data.truckloads[i].palletDesign.push(<Badge style={{backgroundColor:"#f1c40f"}} pill bg="primary">{loadRes.data.truckloads[i].pallets[j]}</Badge>)
+    //                         }
+    //                         // console.log(temp)
+    //                         // loadRes.data.truckloads[i].palletString=temp
+    //                     }
+    //                     setLoadData(loadRes.data.truckloads)                         
+
+    //                 } catch (error) {
+    //                     setErrorNotice("Error retrieving truckloads")
+    //                 }
+    //             }
+
+    //         }
+    //     }
+    //     compMount()
+    // },[])
     const ipinFormatter = (cell, row) => {
         return (
             <Badge bg="info">{cell}</Badge>
@@ -163,28 +164,31 @@ export default function ListTruckloads() {
     const columns = [{
         dataField: 'loadNo',
         text: 'Truckload',
-    },{
+    }, {
         dataField: 'username',
         text: 'Registering user',
     },
     {
-        dataField: 'retailer',
-        text: 'Retailer'
+        dataField: 'palletDesign', //NEED TO DECIDE WHAT TO DO FROM HERE
+        text: 'IPINS',
+        csvExport: false
     },
     {
         dataField: 'pallets', //NEED TO DECIDE WHAT TO DO FROM HERE
-        text: 'IPINS'
+        text: 'IPINS',
+        hidden: true
     }
-    
-    
+
+
     ];
-    const handleSetData = async(respData) => {
+    const handleSetData = async (respData) => {
         for (var i = 0; i < respData.truckloads.length; i++) {
             respData.truckloads[i].palletDesign = []
             respData.truckloads[i].palletCount = respData.truckloads[i].pallets.length
             for (var j = 0; j < respData.truckloads[i].pallets.length; j++) {
                 respData.truckloads[i].palletDesign.push(<Badge style={{ backgroundColor: "#f1c40f" }} pill bg="primary">{respData.truckloads[i].pallets[j]}</Badge>)
             }
+
 
         }
         setLoadData(respData.truckloads)
@@ -207,12 +211,12 @@ export default function ListTruckloads() {
                 {
                     (props) => (
                         <Fragment >
-                            <SearchBar className="reportSearchBar" apiRoute="truckloads" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
+                            <SearchBar className="reportSearchBar" apiRoute="truckloads" setErrorMessage={setErrorNotice} handleSetData={handleSetData} />
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                                <ExportCSVButton { ...props.csvProps }>Export CSV</ExportCSVButton>
-                                <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
-                                <Button variant="danger" onClick={()=>setLoadData([])}><FaTrashAlt /> Clear Manifest</Button>
+                                <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
+                                <Button variant="info" className="mr-2" onClick={() => handleItemDelete}><FaMinusSquare /> Delete</Button>
+                                <Button variant="danger" onClick={() => setLoadData([])}><FaTrashAlt /> Clear Manifest</Button>
 
                             </ButtonToolbar>
                             <div className="table-responsive">

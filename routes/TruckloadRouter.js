@@ -25,7 +25,7 @@ function dumpError(err) {
     }
 }
 router.get("/", auth, async(req, res) => {
-    const truckloads = await TruckLoad.find();
+    const truckloads = await TruckLoad.find({}, {}, { sort: { 'created_at': -1 } });
     res.json({
         truckloads
     });
@@ -36,7 +36,7 @@ router.post("/search", auth, async(req, res) => {
 
         searchQuery = escapeStringRegExp(searchQuery)
 
-        let truckloads = await Truckload.find({ $or: [{ loadNo: { $regex: searchQuery, $options: "i" } }, { username: { $regex: searchQuery, $options: "i" } }, { retailer: { $regex: searchQuery, $options: "i" } }] })
+        let truckloads = await Truckload.find({ $or: [{ loadNo: { $regex: searchQuery, $options: "i" } }, { username: { $regex: searchQuery, $options: "i" } }, { pallets: { $regex: searchQuery, $options: "i" } }] }, {}, { sort: { 'created_at': -1 } })
 
         res.json({ truckloads })
     } catch (err) {

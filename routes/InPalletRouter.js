@@ -43,7 +43,7 @@ function dumpError(err) {
     }
 }
 router.get("/", auth, async(req, res) => {
-    const ipins = await InPallet.find();
+    const ipins = await InPallet.find({}, {}, { sort: { 'created_at': -1 } });
     res.json({
         ipins
     });
@@ -56,7 +56,7 @@ router.post("/search", auth, async(req, res) => {
         searchQuery = escapeStringRegExp(searchQuery)
             // console.log("ka")
             // let ipins= await InPallet.find({$text:{$search:searchQuery},$caseSensitive: false}) 
-        let ipins = await InPallet.find({ $or: [{ ipin: { $regex: searchQuery, $options: "i" } }, { username: { $regex: searchQuery, $options: "i" } }, { locationNo: { $regex: searchQuery, $options: "i" } }, { loadNo: { $regex: searchQuery, $options: "i" } }] })
+        let ipins = await InPallet.find({ $or: [{ ipin: { $regex: searchQuery, $options: "i" } }, { username: { $regex: searchQuery, $options: "i" } }, { location: { $regex: searchQuery, $options: "i" } }, { load_no: { $regex: searchQuery, $options: "i" } }] }, {}, { sort: { 'created_at': -1 } })
             // console.log("ka")
         res.json({ ipins })
     } catch (err) {

@@ -19,8 +19,8 @@ export default function IncomingPalletReport() {
     const alert = useAlert()
     const [ipinData,setIPINData] = useState([])
     const { ExportCSVButton } = CSVExport;
-    const [errorNotice, setErrorNotice] = useState()
-    const [successNotice, setSuccessNotice] = useState()
+    const [errorNotice, setErrorNotice] = useState("")
+    const [successNotice, setSuccessNotice] = useState("")
 
     /////////////////////////////
     
@@ -31,38 +31,38 @@ export default function IncomingPalletReport() {
         d.getHours() + "_" + d.getMinutes();
 
     /////////////////////////////
-    useEffect(()=>{
-        const compMount = async() =>{
-            let token = localStorage.getItem("auth-token");
-            if (token == null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-            else {
-                const tokenResponse = await Axios.post(
-                    "/api/users/tokenIsValid",
-                    null,
-                    { headers: { "x-auth-token": token } }
-                );
-                if (tokenResponse.data) {
-                    try {
-                        const ipinRes = await Axios.get(
-                            // "/api/products/"+cookies.username,
-                            "/api/inpallet/",
-                            { headers: { "x-auth-token": token } }
-                        )
-                        // console.log(ipinRes)
-                        setIPINData(ipinRes.data.ipins)                         
+    // useEffect(()=>{
+    //     const compMount = async() =>{
+    //         let token = localStorage.getItem("auth-token");
+    //         if (token == null) {
+    //             localStorage.setItem("auth-token", "");
+    //             token = "";
+    //         }
+    //         else {
+    //             const tokenResponse = await Axios.post(
+    //                 "/api/users/tokenIsValid",
+    //                 null,
+    //                 { headers: { "x-auth-token": token } }
+    //             );
+    //             if (tokenResponse.data) {
+    //                 try {
+    //                     const ipinRes = await Axios.get(
+    //                         // "/api/products/"+cookies.username,
+    //                         "/api/inpallet/",
+    //                         { headers: { "x-auth-token": token } }
+    //                     )
+    //                     // console.log(ipinRes)
+    //                     setIPINData(ipinRes.data.ipins)                         
                         
-                    } catch (error) {
-                        setErrorNotice("Error retrieving ipins")
-                    }
-                }
+    //                 } catch (error) {
+    //                     setErrorNotice("Error retrieving ipins")
+    //                 }
+    //             }
                 
-            }
-        }
-        compMount()
-    },[])
+    //         }
+    //     }
+    //     compMount()
+    // },[])
     const imageFormatter = (cell, row) => {
         return (<Image src={cell} fluid />);
     }
@@ -168,10 +168,6 @@ export default function IncomingPalletReport() {
         text: 'Retailer'
     },
     {
-        dataField: 'opins', //NEED TO DECIDE WHAT TO DO FROM HERE
-        text: 'OPINS'
-    },
-    {
         dataField: 'cost_price',
         text: 'Cost price'
     }
@@ -179,6 +175,14 @@ export default function IncomingPalletReport() {
     
     ];
     const handleSetData = async(respData) => {
+        for(var i=0; i<respData.ipins.length; i++){
+            if('retailer' in respData.ipins[i] !==true || respData.ipins[i].retailer==null){
+                respData.ipins[i].retailer="NWO"
+            }
+            if('cost_price' in respData.ipins[i] !==true || respData.ipins[i].cost_price==null){
+                respData.ipins[i].cost_price="0.0"
+            }
+        }
         setIPINData(respData.ipins)
     }
     return (
@@ -201,7 +205,7 @@ export default function IncomingPalletReport() {
                             <SearchBar className="reportSearchBar" apiRoute="inpallet" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                            <ExportCSVButton { ...props.csvProps }>Export CSV</ExportCSVButton>
+                            <ExportCSVButton { ...props.csvProps }><FaFileCsv/>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
                                 <Button variant="danger" onClick={()=>setIPINData([])}><FaTrashAlt /> Clear Manifest</Button>
 
