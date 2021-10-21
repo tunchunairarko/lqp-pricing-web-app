@@ -46,7 +46,26 @@ function isUPC(strText) {
     var res = Barcoder.validate(strText)
     return res;
 }
+// router.post("/deleteproducts", auth, async(req, res) => {
+//     // add delete code here
+//     try {
+//         let { toBeDeleted } = req.body;
+//         var inventoryIds = []
+//         var ipins = []
+//         var opins = []
+//         for (var i = 0; i < toBeDeleted.length; i++) {
+//             inventoryIds.push(toBeDeleted[i].inventory_id)
 
+//         }
+//         const resp = await InventoryItems.deleteMany({ inventory_id: { $in: inventoryIds } })
+//         const resp2 = await InPallet.deleteMany({ ipin: { $in: palletNos } })
+//         res.json({ resp })
+//             //i have to add code for removing from a location
+
+//     } catch (err) {
+//         console.log(err)
+//     }
+// });
 router.post("/search", auth, async(req, res) => {
     try {
         let { searchQuery } = req.body;

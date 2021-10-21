@@ -47,17 +47,14 @@ export default function CurrentManifest({manifestData,setManifestData}) {
     const handleItemDelete = () =>{
         for(var j=0; j<selected.length; j++){
             var tempid=selected[j]
-            // for(var k=0; k<manifestData.length; k++){
-            //     if(manifestData[k].inventory_id===tempid){
-            //         setManifestData(manifestData =>(
-            //             manifestData.filter((value,i)=>i!==k)
-            //         ))
-            //     }
-            // }
             setManifestData(manifestData =>(
                 manifestData.filter((value,i)=>value.inventory_id!==tempid)
             ))
         }
+    }
+
+    const handleDeleteAll = () =>{
+        setManifestData([])
     }
 
     const MyExportCSV = (props) => {
@@ -172,7 +169,7 @@ export default function CurrentManifest({manifestData,setManifestData}) {
                                         <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
                                             <MyExportCSV { ...props.csvProps }/>
                                             <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
-                                            <Button variant="danger" onClick={()=>setManifestData([])}><FaTrashAlt /> Clear Manifest</Button>
+                                            <Button variant="danger" onClick={()=>handleDeleteAll}><FaTrashAlt /> Clear Manifest</Button>
 
                                         </ButtonToolbar>
                                         <div className="table-responsive">
