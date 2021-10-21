@@ -7,15 +7,15 @@ import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
 import { Button, ButtonToolbar, Image, Badge } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import SearchBar from './SearchBar';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare } from 'react-icons/fa';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 
 export default function ListTruckloads() {
-    const { userData } = useContext(UserContext);
-    const [cookies] = useCookies(["user"]);
+    const { ExportCSVButton } = CSVExport;
     const alert = useAlert()
     const [loadData,setLoadData] = useState([])
 
@@ -23,9 +23,9 @@ export default function ListTruckloads() {
     const [successNotice, setSuccessNotice] = useState()
 
     /////////////////////////////
-    const { ExportCSVButton } = CSVExport;
+    
     const [selected, setSelected] = useState([])
-    const { SearchBar } = Search;
+    
     var d = new Date();
     var datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
         d.getHours() + "_" + d.getMinutes();
@@ -178,6 +178,17 @@ export default function ListTruckloads() {
     
     
     ];
+    const handleSetData = async(respData) => {
+        for (var i = 0; i < respData.truckloads.length; i++) {
+            respData.truckloads[i].palletDesign = []
+            respData.truckloads[i].palletCount = respData.truckloads[i].pallets.length
+            for (var j = 0; j < respData.truckloads[i].pallets.length; j++) {
+                respData.truckloads[i].palletDesign.push(<Badge style={{ backgroundColor: "#f1c40f" }} pill bg="primary">{respData.truckloads[i].pallets[j]}</Badge>)
+            }
+
+        }
+        setLoadData(respData.truckloads)
+    }
 
     return (
         <Fragment>
@@ -196,10 +207,10 @@ export default function ListTruckloads() {
                 {
                     (props) => (
                         <Fragment >
-                            <SearchBar {...props.searchProps} className="reportSearchBar"/>
+                            <SearchBar className="reportSearchBar" apiRoute="truckloads" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                                <MyExportCSV {...props.csvProps} />
+                                <ExportCSVButton { ...props.csvProps }>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
                                 <Button variant="danger" onClick={()=>setLoadData([])}><FaTrashAlt /> Clear Manifest</Button>
 
@@ -208,8 +219,7 @@ export default function ListTruckloads() {
                                 <BootstrapTable
                                     id="incoming_pallet_report_table"
                                     keyField='loadNo'
-                                    data={loadData ? loadData : []}
-                                    columns={columns}
+
                                     selectRow={selectRow}
                                     cellEdit={cellEdit}
                                     filter={filterFactory()}

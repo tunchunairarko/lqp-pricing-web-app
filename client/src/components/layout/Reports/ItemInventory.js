@@ -7,11 +7,12 @@ import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
 import { Button, ButtonToolbar, Image } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare } from 'react-icons/fa';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import SearchBar from './SearchBar';
 
 export default function ItemInventory() {
     const { userData } = useContext(UserContext);
@@ -23,9 +24,9 @@ export default function ItemInventory() {
     const [successNotice, setSuccessNotice] = useState()
 
     /////////////////////////////
-    const { ExportCSVButton } = CSVExport;
+    
     const [selected, setSelected] = useState([])
-    const { SearchBar } = Search;
+    
     var d = new Date();
     var datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
         d.getHours() + "_" + d.getMinutes();
@@ -206,6 +207,9 @@ export default function ItemInventory() {
         text: 'Sale Price'
     }
     ];
+    const handleSetData = async(respData) => {
+        setItemInventoryData(respData.inventoryItems)
+    }
 
     return (
         <Fragment>
@@ -224,7 +228,7 @@ export default function ItemInventory() {
                 {
                     (props) => (
                         <Fragment >
-                            <SearchBar {...props.searchProps} className="reportSearchBar"/>
+                            <SearchBar apiRoute="products" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
                                 <MyExportCSV {...props.csvProps} />

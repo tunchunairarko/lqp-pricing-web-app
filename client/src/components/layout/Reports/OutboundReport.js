@@ -7,12 +7,13 @@ import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
 import { Button, ButtonToolbar, Image } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import SearchBar from './SearchBar';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare, FaDownload } from 'react-icons/fa';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import OutboundInventoryItemsExport from './OutboundInventoryItemsExport'
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //////////////////////
 
@@ -30,9 +31,9 @@ export default function OutboundReport() {
     const [successNotice, setSuccessNotice] = useState()
 
     /////////////////////////////
-    const { ExportCSVButton } = CSVExport;
+    
     const [selected, setSelected] = useState([])
-    const { SearchBar } = Search;
+    
     var d = new Date();
     var datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
         d.getHours() + "_" + d.getMinutes();
@@ -183,7 +184,12 @@ export default function OutboundReport() {
     }
 
     ];
-
+    const handleSetData = async(respData) => {
+        // for (var i = 0; i < respData.opins.length; i++) {
+        //     respData.opins[i].ipinCount = respData.opins[i].ipins.length
+        // }
+        setOPINData(respData.opins)
+    }
     return (
         <Fragment>
             <ModuleHeader moduleName={"Incoming Pallet Report"} />
@@ -201,7 +207,7 @@ export default function OutboundReport() {
                 {
                     (props) => (
                         <Fragment >
-                            <SearchBar {...props.searchProps} className="reportSearchBar" />
+                            <SearchBar apiRoute="outpallet" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
                                 <MyExportCSV {...props.csvProps} />

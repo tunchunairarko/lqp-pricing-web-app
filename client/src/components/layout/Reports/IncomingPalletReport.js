@@ -7,25 +7,25 @@ import UserContext from "../../../context/UserContext";
 import { useCookies } from "react-cookie";
 import { Button, ButtonToolbar, Image } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import SearchBar from './SearchBar';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { FaFileCsv, FaTrashAlt, FaMinusSquare } from 'react-icons/fa';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 
 export default function IncomingPalletReport() {
-    const { userData } = useContext(UserContext);
-    const [cookies] = useCookies(["user"]);
+    
     const alert = useAlert()
     const [ipinData,setIPINData] = useState([])
-
+    const { ExportCSVButton } = CSVExport;
     const [errorNotice, setErrorNotice] = useState()
     const [successNotice, setSuccessNotice] = useState()
 
     /////////////////////////////
-    const { ExportCSVButton } = CSVExport;
+    
     const [selected, setSelected] = useState([])
-    const { SearchBar } = Search;
+    
     var d = new Date();
     var datestring = d.getDate() + "_" + (d.getMonth() + 1) + "_" + d.getFullYear() + "_" +
         d.getHours() + "_" + d.getMinutes();
@@ -51,7 +51,7 @@ export default function IncomingPalletReport() {
                             "/api/inpallet/",
                             { headers: { "x-auth-token": token } }
                         )
-                        console.log(ipinRes)
+                        // console.log(ipinRes)
                         setIPINData(ipinRes.data.ipins)                         
                         
                     } catch (error) {
@@ -178,7 +178,9 @@ export default function IncomingPalletReport() {
     
     
     ];
-
+    const handleSetData = async(respData) => {
+        setIPINData(respData.ipins)
+    }
     return (
         <Fragment>
             <ModuleHeader moduleName={"Incoming Pallet Report"} />
@@ -196,10 +198,10 @@ export default function IncomingPalletReport() {
                 {
                     (props) => (
                         <Fragment >
-                            <SearchBar {...props.searchProps} className="reportSearchBar"/>
+                            <SearchBar className="reportSearchBar" apiRoute="inpallet" setErrorMessage={setErrorNotice} handleSetData={handleSetData}/>
                             <hr />
                             <ButtonToolbar aria-label="manifest-handler-toolbar" className="mb-2">
-                                <MyExportCSV {...props.csvProps} />
+                            <ExportCSVButton { ...props.csvProps }>Export CSV</ExportCSVButton>
                                 <Button variant="info" className="mr-2" onClick={()=>handleItemDelete}><FaMinusSquare /> Delete</Button>
                                 <Button variant="danger" onClick={()=>setIPINData([])}><FaTrashAlt /> Clear Manifest</Button>
 
